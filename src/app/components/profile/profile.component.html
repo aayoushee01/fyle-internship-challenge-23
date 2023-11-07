@@ -1,0 +1,46 @@
+<div class="flex justify-center">
+  <ng-container *ngIf="loading; else userContent">
+    <div class="flex bg-gray-300 p-5 rounded-lg shadow-md md:w-[60vw] w-[80vw] min-h-[25vh] m-5">
+        <ngx-skeleton-loader count="1" appearance="circle" [theme]="{ width: '100px', height: '100px' }"></ngx-skeleton-loader>
+      <div class="flex flex-col ml-5 w-[100%]">
+        <ngx-skeleton-loader count="1" appearance="line" animation="pulse" class="my-2"></ngx-skeleton-loader>
+        <p class="font-bold text-lg text-blue-800 my-2">
+          <ngx-skeleton-loader count="1" appearance="line" animation="pulse"></ngx-skeleton-loader>
+        </p>
+        <div class="flex items-center my-2">
+          <i class="material-icons text-blue-800">location_on</i>
+          <ngx-skeleton-loader count="1" appearance="line" animation="pulse" [theme]="{ width:'40px'}"></ngx-skeleton-loader>
+        </div>
+        <ngx-skeleton-loader count="1" appearance="line" animation="pulse" ></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" appearance="line" animation="pulse"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #userContent>
+    <div class="flex bg-gray-300 p-5 rounded-lg shadow-md md:w-[60vw] w-[80vw] min-h-[25vh] m-5">
+        <img class="w-[100px] h-[100px] rounded-full bg-gray-500" [src]="userData?.avatar_url || 'fallback-image-url'" alt="Profile Image" />
+      <div class="flex flex-col ml-5 w-[100%]">
+        <h2 class="text-lg font-bold text-blue-800">{{ userData?.name || 'Loading...' }}</h2>
+        <p class="my-2">
+          <span>{{ userData?.bio || 'Loading...' }}</span>
+        </p>
+        <div class="flex items-center my-2">
+          <i class="material-icons text-blue-800">location_on</i>
+          <span class="text-gray-600">{{ userData?.location || 'Loading...' }}</span>
+        </div>
+        <a class="my-4 text-blue-500" [href]="'https://twitter.com/' + (userData?.twitter_username || '')" target="_blank">
+          <div class="flex items-center">
+            <i class="material-icons text-blue-800">link</i>
+            <span>Twitter</span>
+          </div>
+        </a>
+        <a class="my-2 text-blue-500" [href]="userData?.html_url" target="_blank">
+          <div class="flex items-center">
+            <i class="material-icons text-blue-800">link</i>
+            <span>Github Profile Link</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </ng-template>
+</div>

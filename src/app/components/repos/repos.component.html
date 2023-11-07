@@ -1,0 +1,50 @@
+<div class="flex flex-col items-center justify-center p-[10px]">
+  <div class="flex items-center md:w-[60vw] w-[80vw]">
+    <div class="text-center flex-grow text-2xl font-semibold ml-[10vw]">Repositories</div>
+    <div class="flex justify-end items-center p-[10px] mr-[20px]">
+      <label for="itemsPerPage">Items per page:</label>
+      <select id="itemsPerPage" [(ngModel)]="itemsPerPage" (change)="changeItemsPerPage(itemsPerPage)">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+  <div class="border-t-2 border-gray-300 w-[55vw] mt-[10px] mb-[20px]"></div>
+  <ng-container *ngIf="loadingRepositories; else repoContent">
+    <div class="flex flex-col">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center justify-center md:w-[60vw] w-[80vw]">
+        <div *ngFor="let repo of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+          <div class="md:w-[60vw] w-[80vw] md:w-[30vw] m-[10px] p-[10px] border border-gray-300 rounded-[5px]">
+            <ngx-skeleton-loader [count]="1" appearance="line" animation="pulse"></ngx-skeleton-loader>
+            <ngx-skeleton-loader [count]="1" appearance="line" animation="pulse"></ngx-skeleton-loader>
+            <div class="flex flex-wrap flex-row mt-[10px] justify-flex-start">
+              <div *ngFor="let topic of [1, 2, 3]" class="inline-block mr-[5px] mb-[5px]">
+                <ngx-skeleton-loader [count]="1" appearance="line" animation="pulse" [theme]="{ width: '80px'}"></ngx-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #repoContent>
+    <div *ngIf="repositories.length > 0" class="repo-content flex flex-col">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center justify-center md:w-[60vw] w-[80vw]">
+        <div *ngFor="let repo of repositories | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" class="w-[80vw] md:w-[30vw] m-[10px] p-[10px] border border-gray-300 rounded-[5px]">
+          <a href="{{ repo.html_url }}" target="_blank" class="font-bold text-blue-600 no-underline">{{ repo.name }}</a>
+          <div class="mt-[10px]">
+            <p>{{ repo.description || 'N/A' }}</p>
+            <div class="flex flex-wrap flex-row mt-[10px] justify-flex-start">
+              <div *ngFor="let topic of repo.topics" class="inline-block mr-[5px] mb-[5px]">
+                <button class="bg-gray-300 border-none px-[5px] py-[2px] cursor-default rounded-full">{{ topic || 'N/A' }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <pagination-controls (pageChange)="currentPage = $event" [autoHide]="true" class="pagination"></pagination-controls>
+    </div>
+  </ng-template>
+</div>
