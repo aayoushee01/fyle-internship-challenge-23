@@ -7,18 +7,26 @@ import { environment } from 'src/enviornment';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiKey = environment.apiKey; 
+  private apiKey = environment.apiKey || "";
   constructor(
     private httpClient: HttpClient
   ) { }
 
   getUser(githubUsername: string): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.apiKey}`);
-    return this.httpClient.get(`https://api.github.com/users/${githubUsername}`, {headers: headers});
+    if(this.apiKey != ""){
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${this.apiKey}`);
+      return this.httpClient.get(`https://api.github.com/users/${githubUsername}`, {headers: headers});
+    }else{
+      return this.httpClient.get(`https://api.github.com/users/${githubUsername}`);
+    }
   }
   
   getRepositories(githubUsername: string): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.apiKey}`);
-    return this.httpClient.get<any[]>(`https://api.github.com/users/${githubUsername}/repos`,{headers});
+    if(this.apiKey!= ""){
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${this.apiKey}`);
+      return this.httpClient.get(`https://api.github.com/users/${githubUsername}/repos`, {headers: headers});
+    }else{
+      return this.httpClient.get(`https://api.github.com/users/${githubUsername}/repos`);
+    }
   }
 }
