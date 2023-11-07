@@ -37,6 +37,11 @@
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "scripts": true,
+                 "styles": true,
+                 "fonts": false
+             },
               "budgets": [
                 {
                   "type": "initial",
@@ -47,6 +52,12 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
                   "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/enviornment.ts",
+                  "with": "src/enviornment.production.ts"
                 }
               ],
               "outputHashing": "all"
