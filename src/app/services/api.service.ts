@@ -13,20 +13,10 @@ export class ApiService {
   ) { }
 
   getUser(githubUsername: string): Observable<any> {
-    if(this.apiKey != ""){
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${this.apiKey}`);
-      return this.httpClient.get(`https://api.github.com/users/${githubUsername}`, {headers: headers});
-    }else{
-      return this.httpClient.get(`https://api.github.com/users/${githubUsername}`);
-    }
+    return this.httpClient.get(`https://api.github.com/users/${githubUsername}`);
   }
   
   getRepositories(githubUsername: string): Observable<any> {
-    if(this.apiKey!= ""){
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${this.apiKey}`);
-      return this.httpClient.get(`https://api.github.com/users/${githubUsername}/repos`, {headers: headers});
-    }else{
-      return this.httpClient.get(`https://api.github.com/users/${githubUsername}/repos`);
-    }
+    return this.httpClient.get(`https://api.github.com/users/${githubUsername}/repos`);
   }
 }
