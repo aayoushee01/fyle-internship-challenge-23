@@ -32,7 +32,7 @@
   <ng-template #repoContent>
     <div *ngIf="repositories.length > 0" class="repo-content flex flex-col">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center justify-center md:w-[60vw] w-[80vw]">
-        <div *ngFor="let repo of repositories | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" class="w-[80vw] md:w-[30vw] m-[10px] p-[10px] border border-gray-300 rounded-[5px]">
+        <div *ngFor="let repo of repositories | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalRepos}" class="w-[80vw] md:w-[30vw] m-[10px] p-[10px] border border-gray-300 rounded-[5px]">
           <a href="{{ repo.html_url }}" target="_blank" class="font-bold text-blue-600 no-underline">{{ repo.name }}</a>
           <div class="mt-[10px]">
             <p>{{ repo.description || 'N/A' }}</p>
@@ -44,7 +44,9 @@
           </div>
         </div>
       </div>
-      <pagination-controls (pageChange)="currentPage = $event" [autoHide]="true" class="pagination"></pagination-controls>
+      <pagination-controls (pageChange)="newPage($event)" itemsPerPage="itemsPerPage" [autoHide]="true"
+      totalItems="totalRepos"
+      class="pagination"></pagination-controls>
     </div>
   </ng-template>
 </div>

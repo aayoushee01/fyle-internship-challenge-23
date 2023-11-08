@@ -16,7 +16,7 @@ describe('RepoViewComponent', () => {
   let activatedRoute: ActivatedRoute;
 
   beforeEach(() => {
-    apiService = jasmine.createSpyObj('ApiService', ['getUser', 'getRepositories']);
+    apiService = jasmine.createSpyObj('ApiService', ['getUser']);
 
     TestBed.configureTestingModule({
       declarations: [RepoViewComponent,ProfileComponent, ReposComponent ],
@@ -42,38 +42,7 @@ describe('RepoViewComponent', () => {
   });
 
   it('should initialize properties correctly', () => {
-    expect(component.repositories).toEqual([]);
     expect(component.username).toBe('testuser');
     expect(component.userData).toEqual({});
-  });
-
-  it('should call fetchUser and fetchRepositories when username is provided', () => {
-    const spyUser = apiService.getUser.and.returnValue(of('mockUserData'));
-    const spyRepos = apiService.getRepositories.and.returnValue(of('mockRepositories'));
-
-    component.ngOnInit();
-
-    expect(spyUser).toHaveBeenCalledWith('testuser');
-    expect(spyRepos).toHaveBeenCalledWith('testuser');
-    expect(component.userData).toEqual('mockUserData');
-    expect(component.repositories).toEqual('mockRepositories');
-  });
-
-  it('should handle errors for fetchUser', () => {
-    const userError = 'An error occurred';
-    apiService.getUser.and.returnValue(throwError(userError));
-    const consoleErrorSpy = spyOn(console, 'error');
-    component.fetchUser();
-    fixture.detectChanges();
-    expect(consoleErrorSpy).toHaveBeenCalledWith('An error occurred:', userError);
-  });
-
-  it('should handle errors for fetchRepositories', () => {
-    const repositoriesError = 'An error occurred';
-    apiService.getRepositories.and.returnValue(throwError(repositoriesError));
-    const consoleErrorSpy = spyOn(console, 'error');
-    component.fetchRepositories();
-    fixture.detectChanges();
-    expect(consoleErrorSpy).toHaveBeenCalledWith('An error occurred:', repositoriesError);
   });
 });

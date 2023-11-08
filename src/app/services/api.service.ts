@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from 'src/enviornment';
 
 @Injectable({
@@ -16,7 +16,21 @@ export class ApiService {
     return this.httpClient.get(`https://api.github.com/users/${githubUsername}`);
   }
   
-  getRepositories(githubUsername: string): Observable<any> {
-    return this.httpClient.get(`https://api.github.com/users/${githubUsername}/repos`);
+  getRepositories(githubUsername: string, per_page: number, page: number): Observable<any> {
+    const params = {
+      per_page,
+      page
+    };
+    return this.httpClient.get(`https://api.github.com/users/${githubUsername}/repos`, {params}).pipe(
+      catchError((error: any) => {
+        if (error.status === 404) {
+          console.error('Resource not found:', error);
+          return throwError('Resource not found');
+        } else {
+          console.error('Error occurred while fetching repositories:', error);
+          return throwError('Failed to fetch repositories');
+        }
+      })
+    );
   }
 }

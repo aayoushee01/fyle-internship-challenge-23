@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observer } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 
 @Component({
@@ -8,9 +9,9 @@ import { ApiService } from '../../services/api.service';
   styleUrls: ['./repoview.component.scss'],
 })
 export class RepoViewComponent implements OnInit {
-  repositories: any[] = [];
   username: string = '';
   userData: any = {};
+  totalRepos: number = 0;
   constructor(
     private ApiService: ApiService,
     private route: ActivatedRoute
@@ -21,37 +22,25 @@ export class RepoViewComponent implements OnInit {
       this.username = params['username'];
       if (this.username) {
         this.fetchUser();
-        this.fetchRepositories();
       }
     });
   }
 
   fetchUser() {
-    this.ApiService.getUser(this.username).subscribe(
-      (data) => {
+    const observer: Observer<any> = {
+      next: (data) => {
         console.log('Received data:', data);
         this.userData = data;
+        this.totalRepos = data.public_repos;
       },
-      (error) => {
+      error: (error) => {
         console.error('An error occurred:', error);
       },
-      () => {
+      complete: () => {
         console.log('Observable completed');
       }
-    );
-  }
-  fetchRepositories() {
-    this.ApiService.getRepositories(this.username).subscribe(
-      (data) => {
-        console.log('Received data:', data);
-        this.repositories = data;
-      },
-      (error) => {
-        console.error('An error occurred:', error);
-      },
-      () => {
-        console.log('Observable completed');
-      }
-    );
+    };
+  
+    this.ApiService.getUser(this.username).subscribe(observer);
   }
 }

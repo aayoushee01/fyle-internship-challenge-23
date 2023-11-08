@@ -39,12 +39,12 @@ describe('ApiService', () => {
   it('should get user repositories', () => {
     const githubUsername = 'testuser';
     const userRepos = [{ name: 'Repo 1' }, { name: 'Repo 2' }];
-
-    apiService.getRepositories(githubUsername).subscribe((data) => {
+    const per_page = 2;
+    const page = 1;
+    apiService.getRepositories(githubUsername, per_page, page).subscribe((data) => {
       expect(data).toEqual(userRepos);
     });
-
-    const req = httpTestingController.expectOne(`https://api.github.com/users/${githubUsername}/repos`);
+    const req = httpTestingController.expectOne(`https://api.github.com/users/${githubUsername}/repos?per_page=${per_page}&page=${page}`);
     expect(req.request.method).toBe('GET');
     req.flush(userRepos);
   });

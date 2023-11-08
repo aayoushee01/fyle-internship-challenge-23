@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { Observer } from 'rxjs';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-repos',
@@ -8,27 +10,45 @@ import { Component, Input } from '@angular/core';
 
 export class ReposComponent {
   @Input() repositories: any;
+  @Input() username: any;
+  @Input() totalRepos: any;
   currentPage: number = 1;
   itemsPerPage: number = 10;
   maxItemsPerPage: number = 100;
   loadingRepositories: boolean = true;
 
-  ngOnInit() {
-    this.checkRepoData();
-  }
-  
-  checkRepoData() {
-    if (this.repositories && Object.keys(this.repositories).length > 0) {
-      console.log(this.repositories);
-      this.loadingRepositories = false;
-    } else {
-      setTimeout(() => {
-        this.checkRepoData();
-      }, 200);
-    }
-  }
+  constructor(
+    private ApiService: ApiService
+  ) {}
 
+  ngOnInit() {
+    this.fetchRepositories();
+  }
+  fetchRepositories() {
+    const observer: Observer<any> = {
+      next: (data) => {
+        console.log('Received data:', data);
+        this.repositories = data;
+        this.loadingRepositories = false;
+      },
+      error: (error) => {
+        console.error('An error occurred:', error);
+      },
+      complete: () => {
+        console.log('Observable completed');
+      }
+    };
+    this.ApiService.getRepositories(this.username, this.itemsPerPage, this.currentPage).subscribe(observer);
+    console.log("loadingRepositories: " + this.loadingRepositories);
+  }
   changeItemsPerPage(value: number) {
     this.itemsPerPage = value;
+    this.loadingRepositories = true;
+    this.fetchRepositories();
+  }
+  newPage(value: number) {
+    this.currentPage = value;
+    this.loadingRepositories = true;
+    this.fetchRepositories();
   }
 }
