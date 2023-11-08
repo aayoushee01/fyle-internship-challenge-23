@@ -58,5 +58,6 @@ ng test --code-coverage
 ```
 
 or can directly see my coverage by making live server for following html file
-
+```sh
 fyle-internship-challenge-23/coverage/fyle-frontend-challenge/index.html
+```
