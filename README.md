@@ -1,3 +1,5 @@
+# FYLE INTERNSHIP CHALLENGE '23
+
 # GitHub Repository Viewer
 
 This Angular application allows you to search for GitHub repositories by username and view their details.
@@ -35,17 +37,22 @@ Follow these steps to install and run the application:
 2. Install the project dependencies:
 ```sh
    npm install
+```
 
 ## Running the Application
 To run the application, use the following command:
 
 ```sh
    ng serve
+````
 
 ## Usage
 Enter a GitHub username in the search bar.
 Click the "Search" button.
 View the user's profile, a list of repositories, and click on a repository to view its details.
 
-   
-   
+## Run Test Cases
+Using following command you can also see the code coverage : 
+```sh
+ng test --code-coverage
+```
